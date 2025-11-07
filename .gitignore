@@ -1,0 +1,21 @@
+
+# Este arquivo diz ao Git o que deve ignorar e evitar uma porrada de possiveis b.o.
+
+# --- IntelliJ
+# Ignora a pasta de configuração pessoal do IntelliJ
+.idea/
+# Ignora o arquivo de módulo do IntelliJ
+*.iml
+
+# --- NetBeans
+# Ignora a pasta de configuração do NetBeans
+nbproject/
+# Ignora as pastas de build (arquivos compilados) do NetBeans
+build/
+dist/
+
+# --- Arquivos Compilados (Geral) ---
+# Ignora a pasta de build do IntelliJ
+out/
+# Ignora arquivos de classe Java compilados
+*.class
