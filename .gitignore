@@ -1,30 +1,36 @@
 
 # Este arquivo diz ao Git o que deve ignorar e evitar uma porrada de possiveis b.o.
 
+# Ignora QUALQUER pasta chamada '.idea'
+.idea/
 
+# Ignora QUALQUER pasta chamada 'nbproject'
+nbproject/
 
-# --- Configuração de IDEs (Ignora em qualquer lugar) ---
-# O '**' (curinga duplo) força o Git a olhar em TODAS as subpastas
-**/.idea/
-**/*.iml
-**/nbproject/
+# --- A REGRA DE OURO (FORÇA TOTAL) ---
+# Ignora QUALQUER pasta chamada 'target', não importa onde
+target/
+
+# Ignora QUALQUER pasta chamada 'build'
+build/
+
+# Ignora QUALQUER pasta chamada 'dist'
+dist/
+
+# Ignora QUALQUER pasta chamada 'out'
+out/
+
+# Ignora QUALQUER arquivo que termine com .iml
+*.iml
+
+# Ignora QUALQUER arquivo que termine com .class
+*.class
+
+# Ignora QUALQUER arquivo que termine com .lst
+*.lst
 
 # --- Lixo do Windows ---
 Thumbs.db
 Desktop.ini
 ehthumbs.db
 
-# --- A REGRA DE OURO (A CORREÇÃO) ---
-# Ignora a pasta 'target' específica do projeto 'oneX'
-# É O CAMINHO 'oneX/target/', e não só 'target/'
-oneX/target/
-
-# --- Regras Gerais (Pega-Tudo) ---
-# Ignora QUALQUER pasta 'build' ou 'dist' ou 'out'
-**/build/
-**/dist/
-**/out/
-
-# Ignora QUALQUER arquivo .class ou .lst em QUALQUER pasta
-**/*.class
-**/*.lst
