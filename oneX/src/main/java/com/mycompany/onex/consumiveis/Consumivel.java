@@ -4,7 +4,7 @@
  */
 package com.mycompany.onex.consumiveis;
 
-import com.mycompany.onex.personagens.Personagem;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
  * Interface para todos os itens que podem ser consumidos.

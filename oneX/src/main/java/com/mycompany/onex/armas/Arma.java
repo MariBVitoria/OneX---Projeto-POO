@@ -19,7 +19,7 @@ public abstract class Arma {
         this.tipoDeDano = tipoDeDano;
     }
 
-    // Método que descreve o uso da arma, para o log de batalha.
+    // Metodo que descreve o uso da arma, para o log de batalha.
     public abstract String usar();
 
     // Getters que serão usados pela lógica de batalha

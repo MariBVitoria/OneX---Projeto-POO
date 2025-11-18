@@ -5,7 +5,7 @@
 package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
-import com.mycompany.onex.personagens.Personagem;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
  *

@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.onex.personagens;
+package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
 import com.mycompany.onex.consumiveis.Inventario;
-
+import com.mycompany.onex.personagem.*;
 /**
  * Classe abstrata base para todos os personagens.
  * (Refinada para incluir mais atributos e getters/setters para a GUI)

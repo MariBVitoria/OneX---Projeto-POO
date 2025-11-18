@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.onex.personagens;
+package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
  * Classe Mago, focada em inteligência e dano mágico.

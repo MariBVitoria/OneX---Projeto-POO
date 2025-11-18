@@ -4,7 +4,7 @@
  */
 package com.mycompany.onex.consumiveis;
 
-import com.mycompany.onex.personagens.Personagem;
+import com.mycompany.onex.personagem.Personagem;
 
 public class PocaoCura implements Consumivel {
     private final String nome;

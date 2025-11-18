@@ -5,35 +5,35 @@
 package com.mycompany.onex.jogo;
 
 import com.mycompany.onex.consumiveis.Consumivel;
-import com.mycompany.onex.personagens.Personagem;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
- * O "Controller" (Controlador).
- * Esta classe gerencia a lógica da batalha, o estado do jogo e os turnos.
- * Ela NÃO lida com a interface, apenas com as regras.
+ *  Controlador do jogo
+ * Esta classe gerencia a lógica da batalha, o estado, e os turnos.
+ * Ela NÃO lida com a interface, apenas com as regras de funcionamento da partida
  */
 public class Batalha {
     
-    private final Personagem jogador1;
-    private final Personagem computador;
+    private final Personagem player1;
+    private final Personagem cpu;
     private boolean turnoDoJogador;
     
-    public Batalha(Personagem jogador1, Personagem computador) {
-        this.jogador1 = jogador1;
-        this.computador = computador;
+    public Batalha(Personagem jogador1, Personagem cpu) {
+        this.player1 = jogador1;
+        this.cpu = cpu;
         this.turnoDoJogador = true; // Jogador começa
     }
     
     public String executarAtaqueJogador() {
-        if (!turnoDoJogador || !jogador1.estaVivo()) return "";
-        String log = jogador1.atacar(computador);
+        if (!turnoDoJogador || !player1.estaVivo()) return "";
+        String log = player1.atacar(cpu);
         trocarTurno();
         return log;
     }
     
     public String executarHabilidadeJogador() {
-        if (!turnoDoJogador || !jogador1.estaVivo()) return "";
-        String log = jogador1.usarHabilidade(computador);
+        if (!turnoDoJogador || !player1.estaVivo()) return "";
+        String log = player1.usarHabilidade(cpu);
         // Só troca o turno se a habilidade foi usada com sucesso (tinha mana)
         if (!log.contains("não tem mana")) {
             trocarTurno();
@@ -42,40 +42,68 @@ public class Batalha {
     }
     
     public String executarItemJogador(Consumivel item) {
-        if (!turnoDoJogador || !jogador1.estaVivo() || item == null) return "";
-        String log = jogador1.getInventario().usarItem(item, jogador1);
+        if (!turnoDoJogador || !player1.estaVivo() || item == null) return "";
+        String log = player1.getInventario().usarItem(item, player1);
         trocarTurno();
         return log;
     }
     
     public String executarTurnoComputador() {
-        if (turnoDoJogador || !computador.estaVivo()) return "";
-        
+        // Se não for o turno do CPU, ou se ele estiver morto, não faz nada.
+        if (turnoDoJogador || !cpu.estaVivo()) {
+            return "";
+        }
+
         String log;
-        // IA Simples:
-        // Se a vida estiver baixa (<= 40%) e tiver poção de cura, usa poção.
         Consumivel pocaoCura = null;
-        for (Consumivel item : computador.getInventario().getItens()) {
+
+        // --- // PRIORIDADE 1: SOBREVIVÊNCIA (O 'cpu' checa a si mesmo) ---
+
+        // Procura por uma poção de cura no inventário do 'cpu'
+        for (Consumivel item : cpu.getInventario().getItens()) {
             if (item instanceof com.mycompany.onex.consumiveis.PocaoCura) {
                 pocaoCura = item;
-                break;
+                break; // Para de procurar assim que acha
             }
         }
 
-        if (computador.getVida() <= (computador.getVidaMaxima() * 0.4) && pocaoCura != null) {
-            log = computador.getInventario().usarItem(pocaoCura, computador);
+        // Se o 'cpu' está com vida baixa (<= 40%) E achou uma poção, ele se cura.
+        if (cpu.getVida() <= (cpu.getVidaMaxima() * 0.4) && pocaoCura != null) {
+            log = cpu.getInventario().usarItem(pocaoCura, cpu);
         }
-        // Se tiver mana para habilidade, 50% de chance de usar
-        else if (computador.getMana() >= 30 && Math.random() > 0.5) {
-            log = computador.usarHabilidade(jogador1);
-        } 
-        // Senão, ataca
+
+        // --- // PRIORIDADE 2: OFENSIVA (A "MALDADE") ---
+        // Se o 'cpu' não precisou se curar, ele decide como atacar.
         else {
-            log = computador.atacar(jogador1);
+
+            // O 'cpu' "espia" a vida do 'player1'
+            boolean jogadorComPoucaVida = player1.getVida() <= (player1.getVidaMaxima() * 0.25);
+
+            // O 'cpu' checa se tem mana para usar a skill (ex: 30)
+            boolean podeUsarSkill = cpu.getMana() >= 30;
+
+            // A "Maldade": Se o 'player1' está morrendo E o 'cpu' tem mana...
+            if (jogadorComPoucaVida && podeUsarSkill) {
+                // ...ele SEMPRE usa a habilidade (100% de chance) para finalizar.
+                log = cpu.usarHabilidade(player1);
+            }
+
+            // --- // PRIORIDADE 3: ATAQUE NORMAL ---
+            // Se o 'player1' não está morrendo...
+            else if (podeUsarSkill && Math.random() > 0.3) { // 70% de chance de usar skill
+                log = cpu.usarHabilidade(player1);
+            }
+
+            // --- // PRIORIDADE 4: ATAQUE BÁSICO (Fallback) ---
+            // Se não tem mana ou se caiu nos 30% de chance
+            else {
+                log = cpu.atacar(player1);
+            }
         }
-        
+
+        // Passa o turno de volta para o jogador
         trocarTurno();
-        return log;
+        return log; // Retorna o que aconteceu para a tela (log)
     }
     
     private void trocarTurno() {
@@ -83,11 +111,11 @@ public class Batalha {
     }
     
     public Personagem getJogador1() {
-        return jogador1;
+        return player1;
     }
 
-    public Personagem getComputador() {
-        return computador;
+    public Personagem getCpu() {
+        return cpu;
     }
     
     public boolean isTurnoDoJogador() {
@@ -95,11 +123,11 @@ public class Batalha {
     }
     
     public String verificarFimDeJogo() {
-        if (!jogador1.estaVivo()) {
-            return "VOCÊ PERDEU! " + computador.getNome() + " venceu a batalha.";
+        if (!player1.estaVivo()) {
+            return "VOCÊ PERDEU!\n " + cpu.getNome() + " venceu a batalha.";
         }
-        if (!computador.estaVivo()) {
-            return "VOCÊ VENCEU! " + jogador1.getNome() + " derrotou " + computador.getNome() + ".";
+        if (!cpu.estaVivo()) {
+            return "VOCÊ VENCEU!\n " + player1.getNome() + " derrotou " + cpu.getNome() + ".";
         }
         return null; // Jogo continua
     }

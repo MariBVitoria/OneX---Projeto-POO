@@ -1,36 +1,18 @@
+# Ignora pastas de IDE em QUALQUER lugar
+**/.idea/
+**/nbproject/
 
-# Este arquivo diz ao Git o que deve ignorar e evitar uma porrada de possiveis b.o.
+# Ignora a pasta de build do Maven em QUALQUER lugar
+**/target/
 
-# Ignora QUALQUER pasta chamada '.idea'
-.idea/
+# Ignora arquivos de IDE em QUALQUER lugar
+**/*.iml
 
-# Ignora QUALQUER pasta chamada 'nbproject'
-nbproject/
+# Ignora arquivos compilados em QUALQUER lugar
+**/*.class
+**/*.lst
 
-# --- A REGRA DE OURO (FORÇA TOTAL) ---
-# Ignora QUALQUER pasta chamada 'target', não importa onde
-target/
-
-# Ignora QUALQUER pasta chamada 'build'
-build/
-
-# Ignora QUALQUER pasta chamada 'dist'
-dist/
-
-# Ignora QUALQUER pasta chamada 'out'
-out/
-
-# Ignora QUALQUER arquivo que termine com .iml
-*.iml
-
-# Ignora QUALQUER arquivo que termine com .class
-*.class
-
-# Ignora QUALQUER arquivo que termine com .lst
-*.lst
-
-# --- Lixo do Windows ---
+# Ignora lixo do Windows
 Thumbs.db
 Desktop.ini
 ehthumbs.db
-
