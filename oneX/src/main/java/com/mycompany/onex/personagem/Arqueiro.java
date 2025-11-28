@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.onex.personagens;
+package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
 
@@ -13,7 +13,7 @@ public class Arqueiro extends Personagem {
 
     public Arqueiro(String nome, Arma arma) {
         // (Nome, Vida, Mana, Força, Inteligência, Defesa, Arma)
-        super(nome, 100, 70, 12, 8, 8, arma);
+        super(nome, 100, 70, 12, 8, 8, arma,"/imagens/arqueira.png");
     }
 
     @Override

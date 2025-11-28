@@ -1,434 +1,315 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.onex.ui;
 
 import com.mycompany.onex.consumiveis.Consumivel;
 import com.mycompany.onex.jogo.Batalha;
-import com.mycompany.onex.personagens.Personagem;
-import com.mycompany.onex.armas.Arma;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.DefaultComboBoxModel;
+import com.mycompany.onex.personagem.Personagem;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/**
- * A "View" (Visão) - Interface Gráfica (GUI) da Batalha.
- * Construída com Java Swing (JFrame).
- */
-public class TelaBatalha extends javax.swing.JFrame {
+public class TelaBatalha extends JFrame {
 
-    private Batalha batalha; // O "Controller"
+    private final Batalha batalha;
 
-    /**
-     * Creates new form TelaBatalha
-     */
+    // Componentes
+    private JLabel labelNomeJogador, labelNomeComputador;
+    private JProgressBar barraVidaJogador, barraManaJogador;
+    private JProgressBar barraVidaComputador, barraManaComputador;
+    private JLabel labelHpJogador, labelMpJogador, labelHpComputador, labelMpComputador;
+    private JTextArea logBatalha;
+    private JButton botaoAtacar, botaoHabilidade, botaoUsarItem;
+    private JComboBox<Consumivel> comboInventario;
+
+    // Painel para o Cenário de Fundo
+    private class PainelFundo extends JPanel {
+        private Image imagemFundo;
+        public PainelFundo(String caminho) {
+            try {
+                java.net.URL url = getClass().getResource(caminho);
+                if (url != null) {
+                    this.imagemFundo = new ImageIcon(url).getImage();
+                }
+            } catch (Exception e) {
+                System.err.println("Erro cenário: " + e.getMessage());
+            }
+            setLayout(null); // Layout absoluto
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (imagemFundo != null) g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
     public TelaBatalha(Batalha batalha) {
         this.batalha = batalha;
-        initComponents(); // Método gerado pelo NetBeans para desenhar a tela
+        configurarJanela();
+        inicializarComponentes();
         configurarBatalhaInicial();
     }
 
-    /**
-     * Configura os nomes, barras de vida e inventário no início do jogo.
-     */
-    private void configurarBatalhaInicial() {
-        this.setTitle("Batalha de POO - " + batalha.getJogador1().getNome() + " vs " + batalha.getComputador().getNome());
-        
-        // Nomes
-        labelNomeJogador.setText(batalha.getJogador1().getNome());
-        labelNomeComputador.setText(batalha.getComputador().getNome());
-        
-        // Atualiza a UI (barras, texto, etc.)
-        atualizarUI();
-        
-        // Carrega o inventário do jogador
-        atualizarInventario();
-        
-        // Adiciona um log inicial
-        logBatalha.append("A batalha começou! " + batalha.getJogador1().getNome() + " enfrenta " + batalha.getComputador().getNome() + ".\n");
+    private void configurarJanela() {
+        setTitle("OneX - Batalha");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setLocationRelativeTo(null);
+
+        int sorteio = (Math.random() > 0.5) ? 1 : 2;
+        String cenario = "/imagens/cenario" + sorteio + ".jpeg"; //
+        setContentPane(new PainelFundo(cenario));
     }
-    
-    /**
-     * Atualiza todos os componentes visuais (barras de vida, mana, etc.)
-     */
+
+    // Coordenadas em Y; Quanto Maior, mais para baixo a Ui ou Sprite ficará
+    // Coor Y: Quanto menor o Numero, mais para cima ficará
+    private void inicializarComponentes() {
+        // --- LADO DO JOGADOR (Esquerda) ---
+
+        // 1. Sprite
+        labelNomeJogador = new JLabel("Jogador");
+        labelNomeJogador.setBounds(50, 245, 200, 240); // Coordenadas dos Sprites do jogador
+        labelNomeJogador.setForeground(Color.WHITE);
+        labelNomeJogador.setFont(new Font("Arial", Font.BOLD, 16));
+        labelNomeJogador.setHorizontalTextPosition(JLabel.CENTER);
+        labelNomeJogador.setVerticalTextPosition(JLabel.BOTTOM);
+        add(labelNomeJogador);
+
+        // 2. Barras (Acima do Sprite)
+        barraManaJogador = new JProgressBar();
+        barraManaJogador.setBounds(50, 230, 200, 10);
+        barraManaJogador.setForeground(new Color(0, 102, 255));
+        add(barraManaJogador);
+
+        labelMpJogador = new JLabel("MP: 50/50");
+        labelMpJogador.setBounds(50, 215, 200, 15);
+        labelMpJogador.setForeground(Color.WHITE);
+        labelMpJogador.setHorizontalAlignment(SwingConstants.CENTER);
+        add(labelMpJogador);
+
+        barraVidaJogador = new JProgressBar();
+        barraVidaJogador.setBounds(50, 200, 200, 15);
+        barraVidaJogador.setForeground(new Color(0, 204, 51));
+        add(barraVidaJogador);
+
+        labelHpJogador = new JLabel("HP: 100/100");
+        labelHpJogador.setBounds(50, 180, 200, 20);
+        labelHpJogador.setForeground(Color.WHITE);
+        labelHpJogador.setHorizontalAlignment(SwingConstants.CENTER);
+        add(labelHpJogador);
+
+        // Coordenadas em Y; Quanto Maior, mais para baixo a Ui ou Sprite ficará
+        // --- LADO DO COMPUTADOR (Direita) ---
+
+        // 1. Sprite
+        labelNomeComputador = new JLabel("Computador");
+        labelNomeComputador.setBounds(550, 245, 200, 240); // Coordenadas da CPU - Sprite
+        labelNomeComputador.setForeground(Color.WHITE);
+        labelNomeComputador.setFont(new Font("Arial", Font.BOLD, 16));
+        labelNomeComputador.setHorizontalTextPosition(JLabel.CENTER);
+        labelNomeComputador.setVerticalTextPosition(JLabel.BOTTOM);
+        add(labelNomeComputador);
+
+        // 2. Barras
+        barraManaComputador = new JProgressBar();
+        barraManaComputador.setBounds(550, 230, 200, 10);
+        barraManaComputador.setForeground(new Color(0, 102, 255));
+        add(barraManaComputador);
+
+        labelMpComputador = new JLabel("MP: 50/50");
+        labelMpComputador.setBounds(550, 215, 200, 15);
+        labelMpComputador.setForeground(Color.WHITE);
+        labelMpComputador.setHorizontalAlignment(SwingConstants.CENTER);
+        add(labelMpComputador);
+
+        barraVidaComputador = new JProgressBar();
+        barraVidaComputador.setBounds(550, 200, 200, 15);
+        barraVidaComputador.setForeground(new Color(255, 51, 51));
+        add(barraVidaComputador);
+
+        labelHpComputador = new JLabel("HP: 100/100");
+        labelHpComputador.setBounds(550, 180, 200, 20);
+        labelHpComputador.setForeground(Color.WHITE);
+        labelHpComputador.setHorizontalAlignment(SwingConstants.CENTER);
+        add(labelHpComputador);
+
+
+        // --- LOG ---
+        logBatalha = new JTextArea();
+        logBatalha.setEditable(false);
+        logBatalha.setBackground(new Color(0, 0, 0, 150)); // Fundo semi-transparente
+        logBatalha.setOpaque(true);
+        logBatalha.setForeground(Color.WHITE); // Texto branco
+        logBatalha.setFont(new Font("Monospaced", Font.BOLD, 14));
+        logBatalha.setLineWrap(true);
+        logBatalha.setWrapStyleWord(true);
+
+        JScrollPane scroll = new JScrollPane(logBatalha);
+        scroll.setBounds(150, 20, 500, 150);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        add(scroll);
+
+
+        // --- BOTÕES ---
+        int btnY = 530;
+
+        botaoAtacar = new JButton("Atacar");
+        botaoAtacar.setBounds(50, btnY, 120, 30);
+        add(botaoAtacar);
+
+        botaoHabilidade = new JButton("Habilidade");
+        botaoHabilidade.setBounds(180, btnY, 120, 30);
+        add(botaoHabilidade);
+
+        comboInventario = new JComboBox<>();
+        comboInventario.setBounds(450, btnY, 180, 30);
+        add(comboInventario);
+
+        botaoUsarItem = new JButton("Usar Item");
+        botaoUsarItem.setBounds(640, btnY, 110, 30);
+        add(botaoUsarItem);
+
+        // --- LISTENERS ---
+        botaoAtacar.addActionListener(e -> {
+            String log = batalha.executarAtaqueJogador();
+            adicionarLog(log);
+            atualizarUI();
+            if (verificarFimDeJogo() == null) executarTurnoComputador();
+        });
+
+        botaoHabilidade.addActionListener(e -> {
+            String log = batalha.executarHabilidadeJogador();
+            adicionarLog(log);
+            atualizarUI();
+            if (verificarFimDeJogo() == null && !log.contains("não tem mana")) {
+                executarTurnoComputador();
+            }
+        });
+
+        botaoUsarItem.addActionListener(e -> {
+            Consumivel item = (Consumivel) comboInventario.getSelectedItem();
+            if (item != null) {
+                String log = batalha.executarItemJogador(item);
+                adicionarLog(log);
+                atualizarInventario();
+                atualizarUI();
+                if (verificarFimDeJogo() == null) executarTurnoComputador();
+            } else {
+                adicionarLog("Nenhum item selecionado!");
+            }
+        });
+    }
+
+    private void configurarBatalhaInicial() {
+        atualizarUI();
+        atualizarInventario();
+        adicionarLog("A Batalha Começou!");
+        adicionarLog(batalha.getJogador1().getNome() + " vs " + batalha.getCpu().getNome());
+    }
+
     private void atualizarUI() {
         Personagem p1 = batalha.getJogador1();
-        Personagem p2 = batalha.getComputador();
+        Personagem p2 = batalha.getCpu();
 
-        // --- Jogador 1 ---
+        // Sprites
+        setSprite(labelNomeJogador, p1.getCaminhoImagem(), p1.getNome());
+        setSprite(labelNomeComputador, p2.getCaminhoImagem(), p2.getNome());
+
+        // Status
         barraVidaJogador.setMaximum(p1.getVidaMaxima());
         barraVidaJogador.setValue(p1.getVida());
-        labelVidaJogador.setText("HP: " + p1.getVida() + "/" + p1.getVidaMaxima());
-        
+        labelHpJogador.setText(p1.getVida() + "/" + p1.getVidaMaxima());
+
         barraManaJogador.setMaximum(p1.getManaMaxima());
         barraManaJogador.setValue(p1.getMana());
-        labelManaJogador.setText("MP: " + p1.getMana() + "/" + p1.getManaMaxima());
+        labelMpJogador.setText(p1.getMana() + "/" + p1.getManaMaxima());
 
-        // --- Computador ---
         barraVidaComputador.setMaximum(p2.getVidaMaxima());
         barraVidaComputador.setValue(p2.getVida());
-        labelVidaComputador.setText("HP: " + p2.getVida() + "/" + p2.getVidaMaxima());
-        
+        labelHpComputador.setText(p2.getVida() + "/" + p2.getVidaMaxima());
+
         barraManaComputador.setMaximum(p2.getManaMaxima());
         barraManaComputador.setValue(p2.getMana());
-        labelManaComputador.setText("MP: " + p2.getMana() + "/" + p2.getManaMaxima());
-        
-        // Habilita/Desabilita botões baseado em quem é o turno
+        labelMpComputador.setText(p2.getMana() + "/" + p2.getManaMaxima());
+
         boolean turnoJogador = batalha.isTurnoDoJogador();
         botaoAtacar.setEnabled(turnoJogador);
         botaoHabilidade.setEnabled(turnoJogador);
         botaoUsarItem.setEnabled(turnoJogador);
         comboInventario.setEnabled(turnoJogador);
     }
-    
-    /**
-     * Atualiza a lista de itens no ComboBox (dropdown) do inventário.
-     */
+
+    private void setSprite(JLabel label, String caminho, String nomePersonagem) {
+        label.setText(nomePersonagem);
+        try {
+            java.net.URL url = getClass().getResource(caminho);
+            if (url != null) {
+                ImageIcon iconOriginal = new ImageIcon(url);
+                // Redimensiona para 150x150
+                Image imgRedimensionada = iconOriginal.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(imgRedimensionada));
+            } else {
+                System.err.println("Sprite não encontrado: " + caminho);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro sprite: " + e.getMessage());
+        }
+    }
+
     private void atualizarInventario() {
-        // Cria um modelo de dados para o ComboBox
         DefaultComboBoxModel<Consumivel> model = new DefaultComboBoxModel<>();
         for (Consumivel item : batalha.getJogador1().getInventario().getItens()) {
             model.addElement(item);
         }
         comboInventario.setModel(model);
     }
-    
-    /**
-     * Adiciona uma linha de texto ao log de batalha.
-     */
-    private void adicionarLog(String mensagem) {
-        logBatalha.append(mensagem + "\n");
-        // Auto-scroll para o final
+
+    private void adicionarLog(String texto) {
+        logBatalha.append(texto + "\n");
         logBatalha.setCaretPosition(logBatalha.getDocument().getLength());
     }
-    
-    /**
-     * Chamado após uma ação do jogador para executar o turno do computador.
-     */
+
     private void executarTurnoComputador() {
-        // Desabilita botões enquanto o PC "pensa"
-        atualizarUI(); 
-        
-        String logComputador = batalha.executarTurnoComputador();
-        adicionarLog(logComputador);
-        
-        // Atualiza UI após ação do PC
-        atualizarUI();
-        verificarFimDeJogo();
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                Thread.sleep(1000);
+                return null;
+            }
+            @Override
+            protected void done() {
+                String log = batalha.executarTurnoComputador();
+                adicionarLog(log);
+                atualizarUI();
+                verificarFimDeJogo();
+            }
+        }.execute();
     }
-    
-    /**
-     * Verifica se a batalha terminou e desabilita os botões.
-     */
+
     private String verificarFimDeJogo() {
         String resultado = batalha.verificarFimDeJogo();
         if (resultado != null) {
-            adicionarLog("------------------------------------");
+            adicionarLog("\n=== FIM DE JOGO ===");
             adicionarLog(resultado.toUpperCase());
-            
-            // Desabilita todas as ações
-            botaoAtacar.setEnabled(false);
+
             botaoHabilidade.setEnabled(false);
             botaoUsarItem.setEnabled(false);
             comboInventario.setEnabled(false);
+
+            botaoAtacar.setEnabled(true);
+            botaoAtacar.setText("JOGAR DE NOVO");
+
+            for (ActionListener al : botaoAtacar.getActionListeners()) {
+                botaoAtacar.removeActionListener(al);
+            }
+
+            botaoAtacar.addActionListener(e -> {
+                this.dispose();
+                new TelaSelecao().setVisible(true);
+            });
         }
         return resultado;
     }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        painelJogador = new javax.swing.JPanel();
-        labelNomeJogador = new javax.swing.JLabel();
-        barraVidaJogador = new javax.swing.JProgressBar();
-        labelVidaJogador = new javax.swing.JLabel();
-        barraManaJogador = new javax.swing.JProgressBar();
-        labelManaJogador = new javax.swing.JLabel();
-        painelComputador = new javax.swing.JPanel();
-        labelNomeComputador = new javax.swing.JLabel();
-        barraVidaComputador = new javax.swing.JProgressBar();
-        labelVidaComputador = new javax.swing.JLabel();
-        barraManaComputador = new javax.swing.JProgressBar();
-        labelManaComputador = new javax.swing.JLabel();
-        painelAcoes = new javax.swing.JPanel();
-        botaoAtacar = new javax.swing.JButton();
-        botaoHabilidade = new javax.swing.JButton();
-        botaoUsarItem = new javax.swing.JButton();
-        comboInventario = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        logBatalha = new javax.swing.JTextArea();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Batalha POO");
-        setResizable(false);
-
-        painelJogador.setBorder(javax.swing.BorderFactory.createTitledBorder("Jogador"));
-
-        labelNomeJogador.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        labelNomeJogador.setText("Nome do Jogador");
-
-        barraVidaJogador.setForeground(new java.awt.Color(0, 204, 51));
-        barraVidaJogador.setValue(100);
-
-        labelVidaJogador.setText("HP: 100/100");
-
-        barraManaJogador.setForeground(new java.awt.Color(0, 102, 255));
-        barraManaJogador.setValue(50);
-
-        labelManaJogador.setText("MP: 50/50");
-
-        javax.swing.GroupLayout painelJogadorLayout = new javax.swing.GroupLayout(painelJogador);
-        painelJogador.setLayout(painelJogadorLayout);
-        painelJogadorLayout.setHorizontalGroup(
-            painelJogadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelJogadorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(painelJogadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(barraVidaJogador, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(barraManaJogador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(painelJogadorLayout.createSequentialGroup()
-                        .addGroup(painelJogadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelNomeJogador)
-                            .addComponent(labelVidaJogador)
-                            .addComponent(labelManaJogador))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        painelJogadorLayout.setVerticalGroup(
-            painelJogadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelJogadorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelNomeJogador)
-                .addGap(18, 18, 18)
-                .addComponent(labelVidaJogador)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barraVidaJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labelManaJogador)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barraManaJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        painelComputador.setBorder(javax.swing.BorderFactory.createTitledBorder("Computador"));
-
-        labelNomeComputador.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        labelNomeComputador.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelNomeComputador.setText("Nome do Computador");
-
-        barraVidaComputador.setForeground(new java.awt.Color(255, 51, 51));
-        barraVidaComputador.setValue(100);
-
-        labelVidaComputador.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelVidaComputador.setText("HP: 100/100");
-
-        barraManaComputador.setForeground(new java.awt.Color(0, 102, 255));
-        barraManaComputador.setValue(50);
-
-        labelManaComputador.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelManaComputador.setText("MP: 50/50");
-
-        javax.swing.GroupLayout painelComputadorLayout = new javax.swing.GroupLayout(painelComputador);
-        painelComputador.setLayout(painelComputadorLayout);
-        painelComputadorLayout.setHorizontalGroup(
-            painelComputadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelComputadorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(painelComputadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(barraVidaComputador, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(labelNomeComputador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelVidaComputador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(barraManaComputador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelManaComputador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        painelComputadorLayout.setVerticalGroup(
-            painelComputadorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelComputadorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(labelNomeComputador)
-                .addGap(18, 18, 18)
-                .addComponent(labelVidaComputador)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barraVidaComputador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(labelManaComputador)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(barraManaComputador, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        painelAcoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Ações do Jogador"));
-
-        botaoAtacar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botaoAtacar.setText("Atacar");
-        botaoAtacar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoAtacarActionPerformed(evt);
-            }
-        });
-
-        botaoHabilidade.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botaoHabilidade.setText("Habilidade");
-        botaoHabilidade.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoHabilidadeActionPerformed(evt);
-            }
-        });
-
-        botaoUsarItem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        botaoUsarItem.setText("Usar Item");
-        botaoUsarItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoUsarItemActionPerformed(evt);
-            }
-        });
-
-        
-
-        javax.swing.GroupLayout painelAcoesLayout = new javax.swing.GroupLayout(painelAcoes);
-        painelAcoes.setLayout(painelAcoesLayout);
-        painelAcoesLayout.setHorizontalGroup(
-            painelAcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelAcoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(botaoAtacar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(botaoHabilidade, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(comboInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botaoUsarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        painelAcoesLayout.setVerticalGroup(
-            painelAcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelAcoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(painelAcoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaoAtacar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoHabilidade, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoUsarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        logBatalha.setEditable(false);
-        logBatalha.setBackground(new java.awt.Color(255, 255, 255));
-        logBatalha.setColumns(20);
-        logBatalha.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        logBatalha.setRows(5);
-        logBatalha.setBorder(javax.swing.BorderFactory.createTitledBorder("Log de Batalha"));
-        jScrollPane1.setViewportView(logBatalha);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(painelAcoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(painelJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                        .addComponent(painelComputador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(painelComputador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(painelJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painelAcoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * Evento do clique no botão "Atacar".
-     */
-    private void botaoAtacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAtacarActionPerformed
-        String logJogador = batalha.executarAtaqueJogador();
-        adicionarLog(logJogador);
-        
-        atualizarUI();
-        if (verificarFimDeJogo() == null) {
-            executarTurnoComputador();
-        }
-    }//GEN-LAST:event_botaoAtacarActionPerformed
-
-    /**
-     * Evento do clique no botão "Habilidade".
-     */
-    private void botaoHabilidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoHabilidadeActionPerformed
-        String logJogador = batalha.executarHabilidadeJogador();
-        adicionarLog(logJogador);
-        
-        atualizarUI();
-        if (verificarFimDeJogo() == null && !logJogador.contains("não tem mana")) {
-             executarTurnoComputador();
-        }
-    }//GEN-LAST:event_botaoHabilidadeActionPerformed
-
-    /**
-     * Evento do clique no botão "Usar Item".
-     */
-    private void botaoUsarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoUsarItemActionPerformed
-        Consumivel itemSelecionado = (Consumivel) comboInventario.getSelectedItem();
-        
-        if (itemSelecionado == null) {
-            adicionarLog("Você não tem nenhum item para usar!");
-            return;
-        }
-        
-        String logJogador = batalha.executarItemJogador(itemSelecionado);
-        adicionarLog(logJogador);
-        
-        atualizarInventario(); // Remove o item da lista
-        atualizarUI();
-        
-        if (verificarFimDeJogo() == null) {
-            executarTurnoComputador();
-        }
-    }//GEN-LAST:event_botaoUsarItemActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JProgressBar barraManaComputador;
-    private javax.swing.JProgressBar barraManaJogador;
-    private javax.swing.JProgressBar barraVidaComputador;
-    private javax.swing.JProgressBar barraVidaJogador;
-    private javax.swing.JButton botaoAtacar;
-    private javax.swing.JButton botaoHabilidade;
-    private javax.swing.JButton botaoUsarItem;
-    private javax.swing.JComboBox<Consumivel> comboInventario;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel labelManaComputador;
-    private javax.swing.JLabel labelManaJogador;
-    private javax.swing.JLabel labelNomeComputador;
-    private javax.swing.JLabel labelNomeJogador;
-    private javax.swing.JLabel labelVidaComputador;
-    private javax.swing.JLabel labelVidaJogador;
-    private javax.swing.JTextArea logBatalha;
-    private javax.swing.JPanel painelAcoes;
-    private javax.swing.JPanel painelComputador;
-    private javax.swing.JPanel painelJogador;
-    // End of variables declaration//GEN-END:variables
 }

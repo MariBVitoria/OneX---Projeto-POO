@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.onex.personagens;
+package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
  * Classe Mago, focada em inteligência e dano mágico.
@@ -13,7 +14,7 @@ public class Mago extends Personagem {
 
     public Mago(String nome, Arma arma) {
         // (Nome, Vida, Mana, Força, Inteligência, Defesa, Arma)
-        super(nome, 80, 150, 5, 20, 5, arma);
+        super(nome, 80, 150, 5, 20, 5, arma,"/imagens/mago.png");
     }
 
     @Override

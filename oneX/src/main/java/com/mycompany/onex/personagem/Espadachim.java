@@ -5,7 +5,7 @@
 package com.mycompany.onex.personagem;
 
 import com.mycompany.onex.armas.Arma;
-import com.mycompany.onex.personagens.Personagem;
+import com.mycompany.onex.personagem.Personagem;
 
 /**
  *
@@ -16,7 +16,7 @@ public class Espadachim extends Personagem {
     public Espadachim(String nome, Arma arma) {
         // Construtor com atributos balanceados para um Espadachim
         // (Nome, Vida, Mana, Força, Inteligência, Defesa, Arma)
-        super(nome, 120, 50, 15, 5, 10, arma);
+        super(nome, 120, 50, 15, 5, 10, arma,"/imagens/espadachim.png");
     }
 
     @Override

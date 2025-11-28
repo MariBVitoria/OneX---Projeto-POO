@@ -1,21 +1,27 @@
+# Ignora pastas de IDE em QUALQUER lugar
+**/.idea/
+**/nbproject/
+**/.vscode/
+**/.settings/
 
-# Este arquivo diz ao Git o que deve ignorar e evitar uma porrada de possiveis b.o.
+# Ignora a pasta de build do Maven em QUALQUER lugar
+**/target/
+**/bin/
+**/build/
 
-# --- IntelliJ
-# Ignora a pasta de configuração pessoal do IntelliJ
-.idea/
-# Ignora o arquivo de módulo do IntelliJ
-*.iml
+# Ignora arquivos de IDE em QUALQUER lugar
+**/*.iml
+**/*.classpath
+**/*.project
+**/*.iws
+**/*.ipr
 
-# --- NetBeans
-# Ignora a pasta de configuração do NetBeans
-nbproject/
-# Ignora as pastas de build (arquivos compilados) do NetBeans
-build/
-dist/
+# Ignora arquivos compilados em QUALQUER lugar
+**/*.class
+**/*.lst
+**/*.log
 
-# --- Arquivos Compilados (Geral) ---
-# Ignora a pasta de build do IntelliJ
-out/
-# Ignora arquivos de classe Java compilados
-*.class
+# Ignora lixo do Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
