@@ -6,7 +6,7 @@ package com.mycompany.onex.jogo;
 
 import com.mycompany.onex.personagem.*;
 import com.mycompany.onex.armas.*;
-import com.mycompany.onex.ui.*; // Importando todas as interfaces do jogo e
+import com.mycompany.onex.ui.*; // Importando todas as interfaces do jogo
 
 import java.awt.*;
 

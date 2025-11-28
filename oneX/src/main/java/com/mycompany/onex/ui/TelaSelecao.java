@@ -75,13 +75,16 @@ public class TelaSelecao extends JFrame {
     // É aqui que a classe inicia realmente o jogo
     private void iniciar_Batalha(Personagem player){
         // Criando Cpu
-        Arma cajadoBoss = new Cajado("Cajado Boss",30);
-        Personagem cpu = new Mago("Boss",cajadoBoss);
+        Arma cajadoBoss = new Cajado("Cajado Arcano",30);
+        Personagem cpu = new Boss("Mago Negro",cajadoBoss);
 
         //adicionando itens ao inventário
-        player.getInventario().adicionarItem(new PocaoCura("Poção Pequena", 30));
-        player.getInventario().adicionarItem(new PocaoMana("Mana Potion", 25));
+        player.getInventario().adicionarItem(new PocaoCura("Poção Grande de Cura", 50));
+        player.getInventario().adicionarItem(new PocaoMana("Mana Potion", 50));
         cpu.getInventario().adicionarItem(new PocaoCura("Cura do Vilão", 50));
+        cpu.getInventario().adicionarItem(new PocaoMana("Mana Potion", 25));
+        cpu.getInventario().adicionarItem(new PocaoCura("Cura do Boss", 50));
+
 
         Batalha batalha =  new Batalha(player,cpu); //Cria a Batalha
 

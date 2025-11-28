@@ -13,7 +13,7 @@ public class Arqueiro extends Personagem {
 
     public Arqueiro(String nome, Arma arma) {
         // (Nome, Vida, Mana, Força, Inteligência, Defesa, Arma)
-        super(nome, 100, 70, 12, 8, 8, arma);
+        super(nome, 100, 70, 12, 8, 8, arma,"/imagens/arqueira.png");
     }
 
     @Override

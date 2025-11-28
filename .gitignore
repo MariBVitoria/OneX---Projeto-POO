@@ -1,16 +1,25 @@
 # Ignora pastas de IDE em QUALQUER lugar
 **/.idea/
 **/nbproject/
+**/.vscode/
+**/.settings/
 
 # Ignora a pasta de build do Maven em QUALQUER lugar
 **/target/
+**/bin/
+**/build/
 
 # Ignora arquivos de IDE em QUALQUER lugar
 **/*.iml
+**/*.classpath
+**/*.project
+**/*.iws
+**/*.ipr
 
 # Ignora arquivos compilados em QUALQUER lugar
 **/*.class
 **/*.lst
+**/*.log
 
 # Ignora lixo do Windows
 Thumbs.db

@@ -14,7 +14,7 @@ public class Mago extends Personagem {
 
     public Mago(String nome, Arma arma) {
         // (Nome, Vida, Mana, Força, Inteligência, Defesa, Arma)
-        super(nome, 80, 150, 5, 20, 5, arma);
+        super(nome, 80, 150, 5, 20, 5, arma,"/imagens/mago.png");
     }
 
     @Override
