@@ -6,7 +6,7 @@ public class Boss extends Personagem {
 
     public Boss(String nome, Arma arma) {
         // Atributos do Boss
-        super(nome, 300, 200, 25, 10, 15, arma, "/imagens/boss.png");
+        super(nome, 200, 200, 25, 10, 15, arma, "/imagens/boss.png");
     }
 
     @Override
