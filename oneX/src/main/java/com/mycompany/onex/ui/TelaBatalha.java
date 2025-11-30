@@ -83,7 +83,7 @@ public class TelaBatalha extends JFrame {
 
         labelMpJogador = new JLabel("MP: 50/50");
         labelMpJogador.setBounds(50, 215, 200, 15);
-        labelMpJogador.setForeground(Color.WHITE);
+        labelMpJogador.setForeground(Color.BLACK);
         labelMpJogador.setHorizontalAlignment(SwingConstants.CENTER);
         add(labelMpJogador);
 
@@ -94,7 +94,7 @@ public class TelaBatalha extends JFrame {
 
         labelHpJogador = new JLabel("HP: 100/100");
         labelHpJogador.setBounds(50, 180, 200, 20);
-        labelHpJogador.setForeground(Color.WHITE);
+        labelHpJogador.setForeground(Color.BLACK);
         labelHpJogador.setHorizontalAlignment(SwingConstants.CENTER);
         add(labelHpJogador);
 
@@ -118,7 +118,7 @@ public class TelaBatalha extends JFrame {
 
         labelMpComputador = new JLabel("MP: 50/50");
         labelMpComputador.setBounds(550, 215, 200, 15);
-        labelMpComputador.setForeground(Color.WHITE);
+        labelMpComputador.setForeground(Color.BLACK);
         labelMpComputador.setHorizontalAlignment(SwingConstants.CENTER);
         add(labelMpComputador);
 
@@ -129,16 +129,25 @@ public class TelaBatalha extends JFrame {
 
         labelHpComputador = new JLabel("HP: 100/100");
         labelHpComputador.setBounds(550, 180, 200, 20);
-        labelHpComputador.setForeground(Color.WHITE);
+        labelHpComputador.setForeground(Color.BLACK);
         labelHpComputador.setHorizontalAlignment(SwingConstants.CENTER);
         add(labelHpComputador);
 
 
-        // --- LOG ---
-        logBatalha = new JTextArea();
+        // --- LOG (CORRIGIDO) ---
+        // Alteração: Sobrescrevemos o paintComponent para desenhar o fundo transparente corretamente
+        logBatalha = new JTextArea() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRect(0, 0, getWidth(), getHeight());
+                super.paintComponent(g);
+            }
+        };
+
         logBatalha.setEditable(false);
         logBatalha.setBackground(new Color(0, 0, 0, 150)); // Fundo semi-transparente
-        logBatalha.setOpaque(true);
+        logBatalha.setOpaque(false); // <--- MUDANÇA CRUCIAL: Agora deve ser FALSE
         logBatalha.setForeground(Color.WHITE); // Texto branco
         logBatalha.setFont(new Font("Monospaced", Font.BOLD, 14));
         logBatalha.setLineWrap(true);

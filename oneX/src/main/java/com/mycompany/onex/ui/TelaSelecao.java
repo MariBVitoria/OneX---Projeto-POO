@@ -26,7 +26,7 @@ public class TelaSelecao extends JFrame {
         // Criando botões
         JButton btnEspadachim = new JButton("Espadachim");
         JButton btnMago = new JButton("Mago");
-        JButton btnArqueiro = new JButton("Arqueiro");
+        JButton btnArqueiro = new JButton("Arqueira");
 
         // Adicionar na tela as opcoes
 
@@ -66,7 +66,7 @@ public class TelaSelecao extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Arma espectroDaLuz = new Arco("Arco de Luz",30);
-                Personagem arqueiro = new Arqueiro("Caçador",espectroDaLuz);
+                Personagem arqueiro = new Arqueiro("Arqueira",espectroDaLuz);
                  iniciar_Batalha(arqueiro);
             }
         });
@@ -75,7 +75,7 @@ public class TelaSelecao extends JFrame {
     // É aqui que a classe inicia realmente o jogo
     private void iniciar_Batalha(Personagem player){
         // Criando Cpu
-        Arma cajadoBoss = new Cajado("Cajado Arcano",30);
+        Arma cajadoBoss = new Cajado("Cajado Arcano",20);
         Personagem cpu = new Boss("Mago Negro",cajadoBoss);
 
         //adicionando itens ao inventário
