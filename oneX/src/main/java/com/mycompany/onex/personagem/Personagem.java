@@ -15,13 +15,12 @@ public abstract class Personagem implements HabilidadeEspecial, AtaqueBasico {
     protected int manaMaxima;
     protected int forca;
     protected int inteligencia;
-    protected int defesa;
     protected Arma arma;
     protected Inventario inventario;
     protected String caminhoImagem; // Atributo para o Sprite
 
 
-    public Personagem(String nome, int vidaMaxima, int manaMaxima, int forca, int inteligencia, int defesa, Arma arma, String caminhoImagem) {
+    public Personagem(String nome, int vidaMaxima, int manaMaxima, int forca, int inteligencia, Arma arma, String caminhoImagem) {
         this.nome = nome;
         this.vidaMaxima = vidaMaxima;
         this.vida = vidaMaxima;
@@ -29,7 +28,6 @@ public abstract class Personagem implements HabilidadeEspecial, AtaqueBasico {
         this.mana = manaMaxima;
         this.forca = forca;
         this.inteligencia = inteligencia;
-        this.defesa = defesa;
         this.arma = arma;
         this.inventario = new Inventario();
         this.caminhoImagem = caminhoImagem;
@@ -37,9 +35,7 @@ public abstract class Personagem implements HabilidadeEspecial, AtaqueBasico {
 
 
     public void receberDano(int dano) {
-        int danoReduzido = dano - this.defesa;
-        if (danoReduzido < 1) { danoReduzido = 1; }
-        this.vida -= danoReduzido;
+        this.vida -= dano;
         if (this.vida < 0) { this.vida = 0; }
     }
 

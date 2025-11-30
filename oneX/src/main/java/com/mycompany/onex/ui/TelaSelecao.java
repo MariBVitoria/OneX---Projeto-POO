@@ -26,7 +26,7 @@ public class TelaSelecao extends JFrame {
         // Criando botões
         JButton btnEspadachim = new JButton("Espadachim");
         JButton btnMago = new JButton("Mago");
-        JButton btnArqueiro = new JButton("Arqueira");
+        JButton btnArqueiro = new JButton("Arqueiro");
 
         // Adicionar na tela as opcoes
 
@@ -66,7 +66,7 @@ public class TelaSelecao extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Arma espectroDaLuz = new Arco("Arco de Luz",30);
-                Personagem arqueiro = new Arqueiro("Arqueira",espectroDaLuz);
+                Personagem arqueiro = new Arqueiro("Arqueiro",espectroDaLuz);
                  iniciar_Batalha(arqueiro);
             }
         });
@@ -79,11 +79,12 @@ public class TelaSelecao extends JFrame {
         Personagem cpu = new Boss("Mago Negro",cajadoBoss);
 
         //adicionando itens ao inventário
-        player.getInventario().adicionarItem(new PocaoCura("Poção Grande de Cura", 50));
+        player.getInventario().adicionarItem(new PocaoCura("Poção Grande de Cura", 100));
+        player.getInventario().adicionarItem(new PocaoCura("Poção de Cura", 50));
         player.getInventario().adicionarItem(new PocaoMana("Mana Potion", 50));
         cpu.getInventario().adicionarItem(new PocaoCura("Cura do Vilão", 50));
         cpu.getInventario().adicionarItem(new PocaoMana("Mana Potion", 25));
-        cpu.getInventario().adicionarItem(new PocaoCura("Cura do Boss", 50));
+
 
 
         Batalha batalha =  new Batalha(player,cpu); //Cria a Batalha

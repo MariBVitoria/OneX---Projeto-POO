@@ -10,7 +10,7 @@ package com.mycompany.onex.armas;
 public class Cajado extends Arma {
 
     public Cajado(String nome, int danoBase) {
-        super(nome, danoBase, "MAGICO");
+        super(nome, danoBase);
     }
 
     @Override

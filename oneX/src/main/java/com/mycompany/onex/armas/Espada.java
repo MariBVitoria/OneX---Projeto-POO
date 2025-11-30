@@ -1,11 +1,7 @@
-
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-
 package com.mycompany.onex.armas;
 
 /**
@@ -14,7 +10,7 @@ package com.mycompany.onex.armas;
 public class Espada extends Arma {
 
     public Espada(String nome, int danoBase) {
-        super(nome, danoBase, "FISICO");
+        super(nome, danoBase);
     }
 
     @Override
