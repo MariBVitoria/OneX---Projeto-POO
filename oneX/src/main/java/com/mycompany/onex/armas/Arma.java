@@ -11,12 +11,10 @@ package com.mycompany.onex.armas;
 public abstract class Arma {
     protected String nome;
     protected int danoBase;
-    protected String tipoDeDano; // "FISICO" ou "MAGICO"
 
-    public Arma(String nome, int danoBase, String tipoDeDano) {
+    public Arma(String nome, int danoBase) {
         this.nome = nome;
         this.danoBase = danoBase;
-        this.tipoDeDano = tipoDeDano;
     }
 
     // Metodo que descreve o uso da arma, para o log de batalha.
@@ -29,9 +27,5 @@ public abstract class Arma {
 
     public int getDanoBase() {
         return danoBase;
-    }
-
-    public String getTipoDeDano() {
-        return tipoDeDano;
     }
 }

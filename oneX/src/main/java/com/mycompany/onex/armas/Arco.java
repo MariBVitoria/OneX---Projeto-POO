@@ -8,9 +8,9 @@ package com.mycompany.onex.armas;
  * Arma para classes de longo alcance, como Arqueiro.
  */
 public class Arco extends Arma {
-    
+
     public Arco(String nome, int danoBase) {
-        super(nome, danoBase, "FISICO");
+        super(nome, danoBase);
     }
 
     @Override
